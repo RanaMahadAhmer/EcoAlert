@@ -156,7 +156,7 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
                             email: UserInformation.userEmail!,
                             password: UserInformation.userPassword!);
                         _auth.currentUser?.delete();
-                        _showWarning(msg: '');
+                        _showWarning(msg: ' ');
                         Navigator.pushNamed(
                             context, DemographicRegistration.id);
                       } catch (e) {
