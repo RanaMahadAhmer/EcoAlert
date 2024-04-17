@@ -24,12 +24,10 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   late UserCredential user;
   Widget errorCode = const Text('');
 
-  void _setErrorCode({required String msg}) {
+  void _showWarning({required String msg}) {
     setState(() {
       errorCode = Text(msg);
     });
-
-    // Reset the message after 3 seconds
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         errorCode = const Text("");
@@ -75,7 +73,6 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const SizedBox(
               height: 10.0,
@@ -91,10 +88,11 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
               height: 28.0,
             ),
             _createInputField(
-                hint: 'Email Address',
-                fun: (value) {
-                  UserInformation.userEmail = value;
-                }),
+              hint: 'Email Address',
+              fun: (value) {
+                UserInformation.userEmail = value;
+              },
+            ),
             const SizedBox(
               height: 8.0,
             ),
@@ -153,11 +151,12 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
                             size: 35,
                           );
                         });
+
                         user = await _auth.createUserWithEmailAndPassword(
                             email: UserInformation.userEmail!,
                             password: UserInformation.userPassword!);
                         _auth.currentUser?.delete();
-                        _setErrorCode(msg: '');
+                        _showWarning(msg: '');
                         Navigator.pushNamed(
                             context, DemographicRegistration.id);
                       } catch (e) {
@@ -165,21 +164,21 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
                         if (errorCode.contains('[')) {
                           switch (errorCode.split(' ')[0]) {
                             case '[firebase_auth/email-already-in-use]':
-                              _setErrorCode(msg: 'Email Already in Use');
+                              _showWarning(msg: 'Email Already in Use');
                               break;
                             case '[firebase_auth/invalid-email]':
-                              _setErrorCode(msg: 'Email is Not Valid');
+                              _showWarning(msg: 'Email is Not Valid');
                               break;
                             case '[firebase_auth/missing-email]':
-                              _setErrorCode(msg: 'Email is Empty');
+                              _showWarning(msg: 'Email is Empty');
                               break;
                           }
                         } else {
-                          _setErrorCode(msg: 'Email/Password is Empty');
+                          _showWarning(msg: 'Email/Password is Empty');
                         }
                       }
                     } else {
-                      _setErrorCode(
+                      _showWarning(
                           msg:
                               "Please Fill Fields Correctly (Password Min 7 Chars)");
                     }

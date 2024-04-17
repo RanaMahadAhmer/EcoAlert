@@ -15,9 +15,12 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   _createButton(
-      {required String text, required Color color, required VoidCallback fun}) {
+      {required String text,
+      required Color color,
+      required VoidCallback fun,
+      double topPad = 26}) {
     return Padding(
-      padding: const EdgeInsets.only(top: 26.0, left: 50, right: 50),
+      padding: EdgeInsets.only(top: topPad, left: 50, right: 50),
       child: Material(
         elevation: 5.0,
         color: color,
@@ -34,41 +37,45 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
+  List<Widget> _logo() {
+    return [
+      Hero(
+        tag: 'logo',
+        child: SizedBox(
+          height: 160.0,
+          child: Image.asset('images/logo.png'),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 0.0),
+        child: Text(
+          'My Shire',
+          style: TextStyle(
+            fontSize: 25.0,
+            color: primaryTextColor,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      )
+    ];
+  }
+
   Widget _landscapeMode(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryBgColor,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Hero(
-                tag: 'logo',
-                child: SizedBox(
-                  height: 160.0,
-                  child: Image.asset('images/logo.png'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 0.0),
-                child: Text(
-                  'My Shire',
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    color: primaryTextColor,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ],
-          ),
+              mainAxisAlignment: MainAxisAlignment.center, children: _logo()),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _createButton(
                 text: 'Log In',
                 color: colorOne,
+                topPad: 0,
                 fun: () {
                   Navigator.pushNamed(context, LoginScreen.id);
                 },
@@ -76,6 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               _createButton(
                 text: 'Register',
                 color: colorTwo,
+                topPad: 26,
                 fun: () {
                   Navigator.pushNamed(context, ProfileRegistration.id);
                 },
@@ -90,38 +98,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget _portraitMode(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryBgColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Hero(
-                  tag: 'logo',
-                  child: SizedBox(
-                    height: 60.0,
-                    child: Image.asset('images/logo.png'),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    'My Shire',
-                    style: TextStyle(
-                      fontSize: 45.0,
-                      color: primaryTextColor,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
+            ..._logo(),
             _createButton(
               text: 'Log In',
               color: colorOne,
@@ -136,16 +118,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Navigator.pushNamed(context, ProfileRegistration.id);
               },
             ),
-            // _createButton(
-            //   text: 'Register',
-            //   color: colorTwo,
-            //   fun: () {
-            //     setState(() {
-            //       changeTheme();
-            //     });
-            //     ;
-            //   },
-            // ),
           ],
         ),
       ),
@@ -154,9 +126,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return (MediaQuery.sizeOf(context).width >
-            MediaQuery.sizeOf(context).height)
-        ? _landscapeMode(context)
-        : _portraitMode(context);
+    return Scaffold(
+      body:
+          (MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height)
+              ? _landscapeMode(context)
+              : _portraitMode(context),
+    );
   }
 }
