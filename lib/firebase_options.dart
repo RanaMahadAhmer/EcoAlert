@@ -42,17 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyACU4Qt7oRrYEe63kKYUAX8hOOVAoTY5Zk',
-    appId: '1:856010103802:web:ad23d1db365db9fc0ae243',
+    appId: '1:856010103802:web:978f84e552fc65e40ae243',
     messagingSenderId: '856010103802',
     projectId: 'ecoalert-5ac12',
     authDomain: 'ecoalert-5ac12.firebaseapp.com',
     storageBucket: 'ecoalert-5ac12.appspot.com',
-    measurementId: 'G-3HL877YW7P',
+    measurementId: 'G-DW52XYJ1Q0',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDhW_ipenXbgB4Xxjx9YPArk5M2XXeYZ9c',
-    appId: '1:856010103802:android:c99738717d4915540ae243',
+    appId: '1:856010103802:android:ab219a9b4d1d6a2b0ae243',
     messagingSenderId: '856010103802',
     projectId: 'ecoalert-5ac12',
     storageBucket: 'ecoalert-5ac12.appspot.com',
@@ -60,20 +60,20 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC_DXCzFGQGqNpmNIzX1Vjc7JSkuXkFEbk',
-    appId: '1:856010103802:ios:b8b930c2435bdfd80ae243',
+    appId: '1:856010103802:ios:efa63a0f6e6e94a60ae243',
     messagingSenderId: '856010103802',
     projectId: 'ecoalert-5ac12',
     storageBucket: 'ecoalert-5ac12.appspot.com',
-    iosBundleId: 'com.shirecommunity.myShire',
+    iosBundleId: 'com.ecoalert.ecoAlert',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyC_DXCzFGQGqNpmNIzX1Vjc7JSkuXkFEbk',
-    appId: '1:856010103802:ios:b8b930c2435bdfd80ae243',
+    appId: '1:856010103802:ios:efa63a0f6e6e94a60ae243',
     messagingSenderId: '856010103802',
     projectId: 'ecoalert-5ac12',
     storageBucket: 'ecoalert-5ac12.appspot.com',
-    iosBundleId: 'com.shirecommunity.myShire',
+    iosBundleId: 'com.ecoalert.ecoAlert',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'ecoalert-5ac12.appspot.com',
     measurementId: 'G-DW52XYJ1Q0',
   );
+
 }
