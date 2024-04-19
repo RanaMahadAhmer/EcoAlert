@@ -1,4 +1,7 @@
+import 'package:eco_alert/miscellaneous/formatters/email_formatter.dart';
+import 'package:eco_alert/miscellaneous/logo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -65,137 +68,175 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
     );
   }
 
+  Widget _portraitMode(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const SizedBox(
+            height: 10.0,
+          ),
+          buildLogo(height: 100),
+          const SizedBox(
+            height: 28.0,
+          ),
+          _createInputField(
+              hint: 'Email Address (XXX@XXX.XXX)',
+              fun: (value) {
+                UserInformation.userEmail = value;
+              },
+              formatter: [EmailFormatter()]),
+          const SizedBox(
+            height: 8.0,
+          ),
+          _createInputField(
+            hint: 'Full Name',
+            fun: (value) {
+              UserInformation.userName = value;
+            },
+            formatter: [
+              NameFormatter(),
+            ],
+          ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          _createInputField(
+            hint: 'Contact Number (XXXXXXXXXXXX)',
+            keyboard: TextInputType.phone,
+            fun: (value) {
+              UserInformation.userContact = value;
+            },
+            formatter: [
+              PhoneNumberFormatter(),
+            ],
+          ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          _createInputField(
+            hint: 'Password',
+            textHidden: true,
+            fun: (value) {
+              UserInformation.userPassword = value;
+            },
+          ),
+          const SizedBox(
+            height: 24.0,
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 100),
+            child: Material(
+              color: colorOne,
+              borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+              elevation: 5.0,
+              child: MaterialButton(
+                onPressed: () {
+                  _showWarning(msg: "msg");
+                },
+                minWidth: 100.0,
+                height: 52.0,
+                child: const Text(
+                  'Next',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+          Center(child: errorCode),
+        ],
+      ),
+    );
+  }
+
+  Widget _landscapeMode(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Column(
+          children: [
+            buildLogo(height: 160),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 200.0),
+          child: Column(
+            children: [
+              _createInputField(
+                hint: 'Email Address (XXX@XXX.XXX)',
+                fun: (value) {
+                  UserInformation.userEmail = value;
+                },
+                formatter: [EmailFormatter()],
+              ),
+
+              // _createInputField(
+              //   hint: 'Full Name',
+              //   fun: (value) {
+              //     UserInformation.userName = value;
+              //   },
+              //   formatter: [
+              //     NameFormatter()
+              //   ],
+              // ),
+            ],
+          ),
+        ),
+        // Column(
+        //   children: [
+        //     _createInputField(
+        //       hint: 'Contact Number (XXXXXXXXXXXX)',
+        //       keyboard: TextInputType.phone,
+        //       fun: (value) {
+        //         UserInformation.userContact = value;
+        //       },
+        //       formatter: [
+        //         PhoneNumberFormatter(),
+        //       ],
+        //     ),
+        //     _createInputField(
+        //       hint: 'Password',
+        //       textHidden: true,
+        //       fun: (value) {
+        //         UserInformation.userPassword = value;
+        //       },
+        //     ),
+        //     Padding(
+        //       padding:
+        //           const EdgeInsets.symmetric(vertical: 16.0, horizontal: 100),
+        //       child: Material(
+        //         color: colorOne,
+        //         borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+        //         elevation: 5.0,
+        //         child: MaterialButton(
+        //           onPressed: () {
+        //             _showWarning(msg: "msg");
+        //           },
+        //           minWidth: 100.0,
+        //           height: 52.0,
+        //           child: const Text(
+        //             'Next',
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     Center(child: errorCode),
+        //   ],
+        // )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(
-              height: 10.0,
-            ),
-            Hero(
-              tag: 'logo',
-              child: SizedBox(
-                height: 100.0,
-                child: Image.asset('images/logo.png'),
-              ),
-            ),
-            const SizedBox(
-              height: 28.0,
-            ),
-            _createInputField(
-              hint: 'Email Address',
-              fun: (value) {
-                UserInformation.userEmail = value;
-              },
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            _createInputField(
-              hint: 'Full Name',
-              fun: (value) {
-                UserInformation.userName = value;
-              },
-              formatter: [
-                NameFormatter(),
-              ],
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            _createInputField(
-              hint: 'Contact Number (XXXXXXXXXXXX)',
-              keyboard: TextInputType.phone,
-              fun: (value) {
-                UserInformation.userContact = value;
-              },
-              formatter: [
-                PhoneNumberFormatter(),
-              ],
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            _createInputField(
-              hint: 'Password',
-              textHidden: true,
-              fun: (value) {
-                UserInformation.userPassword = value;
-              },
-            ),
-            const SizedBox(
-              height: 24.0,
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 100),
-              child: Material(
-                color: colorOne,
-                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () async {
-                    if (UserInformation.userContact != null &&
-                        UserInformation.userName != null &&
-                        UserInformation.userPassword!.length >= 6 &&
-                        UserInformation.userContact!.length == 15) {
-                      try {
-                        setState(() {
-                          errorCode = LoadingAnimationWidget.inkDrop(
-                            color: const Color.fromARGB(255, 66, 104, 250),
-                            size: 35,
-                          );
-                        });
-
-                        user = await _auth.createUserWithEmailAndPassword(
-                            email: UserInformation.userEmail!,
-                            password: UserInformation.userPassword!);
-                        _auth.currentUser?.delete();
-                        _showWarning(msg: '');
-                        Navigator.pushNamed(
-                            context, DemographicRegistration.id);
-                      } catch (e) {
-                        var errorCode = e.toString();
-                        if (errorCode.contains('[')) {
-                          switch (errorCode.split(' ')[0]) {
-                            case '[firebase_auth/email-already-in-use]':
-                              _showWarning(msg: 'Email Already in Use');
-                              break;
-                            case '[firebase_auth/invalid-email]':
-                              _showWarning(msg: 'Email is Not Valid');
-                              break;
-                            case '[firebase_auth/missing-email]':
-                              _showWarning(msg: 'Email is Empty');
-                              break;
-                          }
-                        } else {
-                          _showWarning(msg: 'Email/Password is Empty');
-                        }
-                      }
-                    } else {
-                      _showWarning(
-                          msg:
-                              "Please Fill Fields Correctly (Password Min 7 Chars)");
-                    }
-                  },
-                  minWidth: 100.0,
-                  height: 52.0,
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            Center(child: errorCode),
-          ],
-        ),
-      ),
+      body:
+          (MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height)
+              ? _landscapeMode(context)
+              : _portraitMode(context),
     );
   }
 }
