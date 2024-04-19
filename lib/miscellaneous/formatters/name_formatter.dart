@@ -4,7 +4,7 @@ class NameFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    final filteredText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z ]'), ' ');
+    final filteredText = newValue.text.replaceAll(RegExp(r'[^a-zA-Z ]'), '');
 
     String formattedName = '';
     final words = filteredText.split(' ');

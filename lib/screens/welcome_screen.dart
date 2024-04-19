@@ -1,3 +1,4 @@
+import 'package:eco_alert/miscellaneous/logo.dart';
 import 'package:flutter/material.dart';
 import '../miscellaneous/colors.dart';
 
@@ -39,17 +40,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   List<Widget> _logo() {
     return [
-      Hero(
-        tag: 'logo',
-        child: SizedBox(
-          height: 160.0,
-          child: Image.asset('images/logo.png'),
-        ),
-      ),
+      buildLogo(height: 160),
       Padding(
         padding: const EdgeInsets.only(left: 0.0),
         child: Text(
-          'My Shire',
+          'Eco Alert',
           style: TextStyle(
             fontSize: 25.0,
             color: primaryTextColor,
