@@ -38,70 +38,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 
-  List<Widget> _logo() {
-    return [
-      buildLogo(height: 160),
-      Padding(
-        padding: const EdgeInsets.only(left: 0.0),
-        child: Text(
-          'Eco Alert',
-          style: TextStyle(
-            fontSize: 25.0,
-            color: primaryTextColor,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      )
-    ];
-  }
-
   Widget _landscapeMode(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBgColor,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Column(
-              mainAxisAlignment: MainAxisAlignment.center, children: _logo()),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _createButton(
-                text: 'Log In',
-                color: colorOne,
-                topPad: 0,
-                fun: () {
-                  Navigator.pushNamed(context, LoginScreen.id);
-                },
-              ),
-              _createButton(
-                text: 'Register',
-                color: colorTwo,
-                topPad: 26,
-                fun: () {
-                  Navigator.pushNamed(context, ProfileRegistration.id);
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _portraitMode(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBgColor,
-      body: Center(
-        child: Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        buildLogo(height: 160),
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            ..._logo(),
+          children: [
             _createButton(
               text: 'Log In',
               color: colorOne,
+              topPad: 0,
               fun: () {
                 Navigator.pushNamed(context, LoginScreen.id);
               },
@@ -109,12 +58,38 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             _createButton(
               text: 'Register',
               color: colorTwo,
+              topPad: 26,
               fun: () {
                 Navigator.pushNamed(context, ProfileRegistration.id);
               },
             ),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _portraitMode(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          buildLogo(height: 160),
+          _createButton(
+            text: 'Log In',
+            color: colorOne,
+            fun: () {
+              Navigator.pushNamed(context, LoginScreen.id);
+            },
+          ),
+          _createButton(
+            text: 'Register',
+            color: colorTwo,
+            fun: () {
+              Navigator.pushNamed(context, ProfileRegistration.id);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -122,10 +97,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          (MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height)
-              ? _landscapeMode(context)
-              : _portraitMode(context),
+      body: OrientationBuilder(
+        builder: (BuildContext context, Orientation orientation) {
+          return orientation == Orientation.portrait
+              ? _portraitMode(context)
+              : _landscapeMode(context);
+        },
+      ),
     );
   }
 }
