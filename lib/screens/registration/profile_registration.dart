@@ -27,6 +27,8 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
   final _auth = FirebaseAuth.instance;
   late UserCredential user;
   Widget errorCode = const Text('');
+  List _entryBoxList = [];
+  bool _isVisible = true;
 
   void _showWarning({required String msg}) {
     setState(() {
@@ -44,7 +46,7 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
       required Function(String) fun,
       TextInputType? keyboard,
       bool textHidden = false,
-      List<TextInputFormatter>? formatter}) {
+      TextInputFormatter? formatter}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
@@ -53,7 +55,17 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
         textAlign: TextAlign.center,
         keyboardType: keyboard,
         onChanged: fun,
-        inputFormatters: formatter,
+        obscuringCharacter: "*",
+        onTap: () {
+          if (hint == 'Password (Tap to See)') {
+            setState(() {
+              _isVisible = !_isVisible;
+            });
+          }
+        },
+        inputFormatters: <TextInputFormatter>[
+          formatter ?? FilteringTextInputFormatter.deny('')
+        ],
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(color: Colors.lightBlue),
@@ -72,181 +84,148 @@ class _ProfileRegistrationState extends State<ProfileRegistration> {
     );
   }
 
-  Widget _portraitMode(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(minHeight: MediaQuery.sizeOf(context).height),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            buildLogo(height: 160),
-            _createInputField(
-                hint: 'Email Address (XXX@XXX.XXX)',
-                fun: (value) {
-                  UserInformation.userEmail = value;
-                },
-                formatter: [EmailFormatter()]),
-            _createInputField(
-              hint: 'Full Name',
-              fun: (value) {
-                UserInformation.userName = value;
-              },
-              formatter: [
-                NameFormatter(),
-              ],
-            ),
-            _createInputField(
-              hint: 'Contact Number (XXXXXXXXXXXX)',
-              keyboard: TextInputType.phone,
-              fun: (value) {
-                UserInformation.userContact = value;
-              },
-              formatter: [
-                PhoneNumberFormatter(),
-              ],
-            ),
-            _createInputField(
-              hint: 'Password',
-              textHidden: true,
-              fun: (value) {
-                UserInformation.userPassword = value;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: colorOne,
-                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    _showWarning(msg: "msg");
-                  },
-                  minWidth: 100.0,
-                  height: 52.0,
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            Center(child: errorCode),
-          ],
+  _createNextButton() {
+    return Material(
+      color: colorOne,
+      borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+      elevation: 5.0,
+      child: MaterialButton(
+        onPressed: () {
+          _showWarning(msg: "msg");
+        },
+        minWidth: 100.0,
+        height: 52.0,
+        child: const Text(
+          'Next',
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );
   }
 
-  Widget _landscapeMode(BuildContext context) {
-    return SingleChildScrollView(
-        child: ConstrainedBox(
-      constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: buildLogo(height: 160),
+  Widget _portraitMode(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                buildLogo(height: 160),
+                ..._entryBoxList,
+                _createNextButton(),
+                Center(child: errorCode),
+              ],
+            ),
           ),
-          Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Row(
+        );
+      },
+    );
+  }
+
+  Widget _landscapeMode(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollView(
+            child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: buildLogo(height: 160),
+              ),
+              Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _createInputField(
-                              hint: 'Email Address (XXX@XXX.XXX)',
-                              fun: (value) {
-                                UserInformation.userEmail = value;
-                              },
-                              formatter: [EmailFormatter()],
-                            ),
-                            const SizedBox(
-                              height: 8.0,
-                            ),
-                            _createInputField(
-                              hint: 'Full Name',
-                              fun: (value) {
-                                UserInformation.userName = value;
-                              },
-                              formatter: [NameFormatter()],
-                            ),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 8.0,
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _createInputField(
-                              hint: 'Contact Number (XXXXXXXXXXXX)',
-                              keyboard: TextInputType.phone,
-                              fun: (value) {
-                                UserInformation.userContact = value;
-                              },
-                              formatter: [
-                                PhoneNumberFormatter(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _entryBoxList[0],
+                                const SizedBox(
+                                  height: 8.0,
+                                ),
+                                _entryBoxList[1],
                               ],
                             ),
-                            const SizedBox(
-                              height: 8.0,
-                            ),
-                            _createInputField(
-                              hint: 'Password',
-                              textHidden: true,
-                              fun: (value) {
-                                UserInformation.userPassword = value;
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Column(
-                    children: [
-                      Material(
-                        color: colorOne,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(30.0)),
-                        elevation: 5.0,
-                        child: MaterialButton(
-                          onPressed: () {
-                            _showWarning(msg: "msg");
-                          },
-                          minWidth: 100.0,
-                          child: const Text(
-                            'Next',
-                            style: TextStyle(color: Colors.white),
                           ),
-                        ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _entryBoxList[2],
+                                const SizedBox(
+                                  height: 8.0,
+                                ),
+                                _entryBoxList[3],
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
                       ),
-                      Center(child: errorCode),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      Column(
+                        children: [
+                          _createNextButton(),
+                          Center(child: errorCode),
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ))
-        ],
-      ),
-    ));
+                  ))
+            ],
+          ),
+        ));
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    _entryBoxList = [
+      _createInputField(
+          hint: 'Email Address (XXX@XXX.XXX)',
+          fun: (value) {
+            UserInformation.userEmail = value;
+          },
+          formatter: EmailFormatter()),
+      _createInputField(
+          hint: 'Full Name',
+          fun: (value) {
+            UserInformation.userName = value;
+          },
+          formatter: NameFormatter()),
+      _createInputField(
+        hint: 'Contact Number (XXXXXXXXXXXX)',
+        keyboard: TextInputType.phone,
+        fun: (value) {
+          UserInformation.userContact = value;
+        },
+        formatter: PhoneNumberFormatter(),
+      ),
+      _createInputField(
+        hint: 'Password (Tap to See)',
+        textHidden: _isVisible,
+        fun: (value) {
+          UserInformation.userPassword = value;
+        },
+      ),
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: OrientationBuilder(
